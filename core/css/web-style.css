@@ -1,0 +1,94 @@
+/* 
+* CSS untuk Web Panel
+*/
+ @import url('bootstrap.min.css');
+ @import url('bootstrap-theme.min.css');
+ body {
+    background-color: #e0e0e0;
+}
+.header {
+    background-color: #0360C0;
+    display: inline-block;
+    width: 100%;
+}
+.sidebar {
+    background-color: #0B80D0;
+    min-height: 100%;
+    position: fixed;
+    top: 0;
+}
+.title-site {
+    font-size: 19px;
+    color: #FFF;
+    background: #444;
+    margin: 0 -15px;
+    padding: 10px 18px;
+}
+.main {
+    padding: 0;
+    list-style: none;
+}
+.main li {
+    border-bottom: 1px solid #8893CC;
+}
+.main li:last-child {
+    border: none;
+}
+.main li a {
+    color: #fff;
+    padding: 10px 20px;
+    display: block;
+    margin: 0 -15px;
+    font-size: 13px;
+}
+.main li a:hover {
+    text-decoration: none;
+    background-color: #444;
+}
+.current_page > a {
+    border-left: 4px solid #444;
+}
+.content {
+    margin: 20px 10px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+}
+.content .title {
+    border-bottom: 1px solid #ddd;
+    margin: 5px -10px;
+    padding: 0 10px 10px;
+}
+.s {
+    margin: 5px 0;
+}
+.table-form {
+    width: 50%;
+}
+.table-form td {
+    padding: 5px;
+}
+.notice {
+    width: 400px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+.credit {
+    position: absolute;
+    bottom: 10px;
+    font-size: 12px;
+}
+.glyphicon {
+    padding: 5px;
+}
+.edit-form {
+    display: none;
+}
+.loading {
+    background-image: url('ajax-loader.gif');
+    width: 60px;
+    height: 10px;
+    margin:0 auto;
+}

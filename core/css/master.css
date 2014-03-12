@@ -1,0 +1,105 @@
+/* 
+ = master CSS
+ */
+.turquoise {
+    background-color: #1abc9c
+}
+
+.emerald {
+    background-color:#2ecc71
+}
+
+.peter-river {
+    background-color: #3498db
+}
+
+.amethyst {
+    background-color: #9b59b6
+}
+
+.wet-asphalt {
+    background-color: #34495e
+}
+
+.sun-flower {
+    background-color: #f1c40f
+}
+
+.carrot {
+    background-color: #e67e22
+}
+
+.alizarin {
+    background-color: #e74c3c
+}
+
+.clouds {
+    background-color: #ecf0f1
+}
+
+.concrete {
+    background-color: #95a5a6
+}
+
+
+/* for hover */
+
+.green-sea {
+    background-color: #16a085
+}
+.nephritis {
+    background-color: #27ae60
+}
+.belize-hole {
+    background-color: #2980b9
+}
+.wisteria {
+    background-color: #8e44ad
+}
+.midnight-blue {
+    background-color: #2c3e50
+}
+.orange {
+    background-color: #f39c12
+}
+.pumpkin {
+    background-color: #d35400
+}
+.pomegranate {
+    background-color: #c0392b
+}
+.silver {
+    background-color: #bdc3c7
+}
+.asbestos {
+    background-color: #7f8c8d
+}
+
+/* Button */
+button{
+  border:none;
+  outline: none;
+  color: #FFF;
+  cursor: pointer;
+}
+.button {
+   padding: 9px 18px;
+   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+   color: white;
+   font-size: 16px;
+   text-decoration: none;
+   vertical-align: middle;
+ }
+.button:hover {
+   border-top-color: #28597a;
+   color: #ccc;
+}
+.button:active {
+   border-top-color: #1b435e;
+}
+.button-midnight{
+  background-color: #2c3e50;
+}
+.button-midnight:active{
+  background-color: #34495e;
+}
