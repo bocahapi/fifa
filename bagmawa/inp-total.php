@@ -21,7 +21,7 @@ if( !isset($_SESSION['login'])) {
                 <td>User</td>
                 <td>:</td>
                 <td>
-                <input type="hidden" name="act" value="input-total">
+                    <input type="hidden" name="act" value="input-total">
                     <select name="user" id="" class="form-control input-sm">
                         <option value="">Pilih User</option>
                     <?php
@@ -72,6 +72,7 @@ if( !isset($_SESSION['login'])) {
         
     </div>
     <!-- View Dana -->
+    
     <table class="table table-bordered">
         <tr>
             <th>Nomor</th>
@@ -103,6 +104,7 @@ if( !isset($_SESSION['login'])) {
         ?>
 
     </table>
+
 </div>
 
 <script>
@@ -222,7 +224,10 @@ jQuery(function($){
             }
         }); return false;
     });
-
+    
+    /*
+        Lihat Form input
+    */
     jQuery('.lihat').click(function(event) {
        
        var button = $(this);

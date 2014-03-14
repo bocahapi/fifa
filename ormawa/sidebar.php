@@ -12,7 +12,7 @@ if( !isset($_SESSION['login'])) {
 }?>
 
 <div class="col-md-2 col-sm-3 sidebar">
-    <h1 class="title-site">Ormawa</h1>
+    <h1 class="title-site"><?php echo $get_name ;?></h1>
 
    		<?php fa_nav($_SESSION['level']);?>
    		

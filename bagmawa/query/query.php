@@ -4,7 +4,7 @@ session_start();
 * Pengechekan Definisi UMS
 */
 if(!isset($_SESSION['login'])){
-    die();
+    header('location:./../../404.html');
 }
 # include connect database
 include_once('./../../fa-config.php');
@@ -54,6 +54,169 @@ switch($parameter){
 		}
 	break;
 
+	# Delete Management Jenis Data
+	case 'men-delete':
+		$id  = $_POST['id'];
+		$_ex = explode('-', $id);
+
+		$id_sub   = $_ex[0];
+		$id_jenis = $_ex[1];
+
+		$sql 	= "SELECT * FROM `sub_dana` WHERE id_jenis='$id_jenis'";
+		$query  = $mysqli->query($sql);
+		$num 	= $query->num_rows;
+
+			$del_sub_dana = $mysqli->query("DELETE FROM `sub_dana` WHERE id_sub = '$id_sub' ");
+
+			if($del_sub_dana){
+
+				if($num == 1){
+				
+					$del = $mysqli->query("DELETE FROM `jenis_dana` WHERE id_jenis='$id_jenis' ");
+					
+					if($del){
+						echo "sukses";
+					}else{
+						echo "error";
+					}
+				}
+
+			}else{
+				echo "error";
+			}
+		break;
+
+	#Edit Manajemen Jenis Dana
+	case 'men-edit':
+		$id  = $_POST['id'];
+		$_ex = explode('-', $id);
+
+		$id_sub   = $_ex[0];
+		$id_jenis = $_ex[1];
+
+		$jenis_dana = $mysqli->query("SELECT nama_jenis FROM `jenis_dana` WHERE id_jenis = '$id_jenis' ");
+		$nama_jenis = $jenis_dana->fetch_assoc();
+		$nama 		= $nama_jenis['nama_jenis'];
+
+		# Mengambil Nama Sub dana
+		$sub_dana = $mysqli->query("SELECT nama_sub FROM `sub_dana` WHERE id_sub = '$id_sub' LIMIT 1");
+		$index 	  = $sub_dana->fetch_assoc();
+
+		?>
+		<ul class="nav nav-tabs">
+		  <li class="active"><a href="#nama_jenis" data-toggle="tab">Jenis Dana</a></li>
+		  <li><a href="#nama_sub" data-toggle="tab">Sub Dana</a></li>
+		</ul>
+
+		
+		<div class="tab-content">
+		  <!-- Tab Jenis Dana -->
+		  <div class="tab-pane active" id="nama_jenis">
+		  	<div class="row">
+		  		<div class="form-group">
+	                <form action="query/query.php" method="post" class="col-md-8 s">
+	                    <input type="hidden" name="act" value="jd-update">
+	                    <input type="hidden" name="id" value="<?php echo $id_jenis;?>">
+	                    <input type="hidden" name="last" value="<?php echo $nama;?>">
+	                    <br>
+	                    <input type="text" name="jenis_dana" class="form-control" placeholder="Nama Jenis Dana" value="<?php echo $nama;?>"><br>
+	                    <div class="btn btn-primary btn-sm save">Simpan</div>
+	                </form>
+	            </div>
+		  	</div>
+		  </div>
+
+		  <!-- Tab Sub Dana  -->
+		  <div class="tab-pane" id="nama_sub">
+		  	<div class="row">
+			  	<div class="form-group">
+			  	<br>
+	                <form action="query/query.php" method="post" class="col-md-8 s">
+	                  <input type="hidden" name="act" value="sd-update">
+	                  <input type="hidden" name="id" value="<?php echo $id_sub ;?>">
+	                   <select name="jenis_dana" id="" class="form-control">
+	                       <option value="">Pilih Jenis Dana</option>
+	                       <?php
+	                       $stmt = $mysqli->query("SELECT * FROM jenis_dana");
+	                       while($jenis_dana = $stmt->fetch_assoc()){
+
+	                       	$selected = ($jenis_dana['id_jenis'] == $id_jenis ) ? 'selected' : '';
+	                        
+	                        echo "<option value=\"{$jenis_dana['id_jenis']}\" {$selected}>{$jenis_dana['nama_jenis']}</option>"; 
+	                       
+	                       }
+	                       $stmt->free();
+	                       ?>
+	                   </select> <br>
+	                   <select name="sub_dana" id="" class="form-control">
+	                       <option value="Nalar" <?php if($index['nama_sub'] == 'Nalar') {echo 'selected' ;}?>>Nalar</option>
+	                       <option value="Non Nalar" <?php if($index['nama_sub'] == 'Non Nalar') {echo 'selected' ;}?>>Non Nalar</option>
+	                       <option value="Reor" <?php if($index['nama_sub'] == 'Reor') {echo 'selected' ;}?>>Reor</option>
+	                   </select> <br>
+	                   <div class="btn btn-primary btn-sm save">Simpan</div>
+	               </form>
+	        	</div>
+			  </div>
+			</div>
+		</div>
+
+		<?php
+		break;
+
+	# Update Nama Jenis Dana
+	case 'jd-update':
+		$id_jenis   = $_POST['id'];
+		$last_nama  = $_POST['last'];
+		$nama_jenis = $_POST['jenis_dana'];
+
+		// mengecek Nama terakhir yang di input kedalam database, jika sama / kosong , maka tidak akan dirubah.
+		if( $nama_jenis == $last_nama || $nama_jenis == '' )
+		{
+
+			echo "sukses";
+
+		}
+		// jika Nama Jenis berbeda, maka akan di update.
+		else if( $nama_jenis != $last_nama )
+		{
+
+			$Update = $mysqli->query("UPDATE `jenis_dana` SET nama_jenis= '$nama_jenis' WHERE id_jenis = '$id_jenis'");
+
+			if ($Update) {
+				echo "sukses";
+			} else {
+				echo "error";
+			}
+			
+
+		}
+		break;
+
+	#update Sub Dana
+	case 'sd-update':
+		$id_sub = $_POST['id'];
+		$id_jenis = $_POST['jenis_dana'];
+		$nama_sub = $_POST['sub_dana'];
+
+		#check data masih sama ataukah tidak
+		$check  = $mysqli->query("SELECT * FROM `sub_dana` WHERE id_sub='$id_sub' AND id_jenis='$id_jenis' AND nama_sub='$nama_sub' ");
+		$num  	= $check->num_rows;
+
+		if($num == 1){
+			echo "sukses";
+		}else{
+
+			$update = $mysqli->query("UPDATE `sub_dana` SET id_jenis='$id_jenis', nama_sub='$nama_sub' WHERE id_sub='$id_sub' ");
+
+			if($update){
+				echo "sukses";
+			}else{
+				echo "error";
+			}
+			
+		}
+		break;
+
 	# Halaman Input Total Dana untuk Menampilkan sub dana.
 	case 'input-total':
 
@@ -81,7 +244,7 @@ switch($parameter){
 	                ."<td>:</td>"
 	                ."<td>"
 	                ."<input type=\"hidden\" name=\"id[]\" value=\"{$sub_dana['id_sub']}\">"
-	                ."<input type=\"text\" data=\"numb\" class=\"form-control\" name=\"dn_total[]\" placeholder=\"placeholder\">"
+	                ."<input type=\"text\" data=\"numb\" class=\"form-control\" name=\"dn_total[]\" placeholder=\"Total Dana\">"
 	                ."</td>"
 	            	."</tr>";
 				}
@@ -269,6 +432,8 @@ switch($parameter){
 	    <hr>
 	    <?php 
 		break;
+	
+	#Update From total dana
 	case 'update_sub_dana':
 		$id 		= $_POST['id_user'];
 		$id_sub 	= $_POST['id'];
@@ -291,7 +456,21 @@ switch($parameter){
 		}
 		print_r($res);
 		break;
+	
+	case 'aksi':
+		$id  = $_POST['id'];
+		$val = $_POST['val'];
 
+		$sql = "UPDATE proker SET status ='$val' WHERE id_proker='$id' ";
+
+		$query = $mysqli->query($sql);
+
+		if($query){
+
+			echo "sukses";
+		}
+		
+		break;
 	# jika @$parameter tidak ditemukan, maka blank
 	default:
 

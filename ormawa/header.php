@@ -4,12 +4,16 @@ session_start();
 * Check sudah login atau belum
 */
 if(!isset($_SESSION['login'])){
-	die();
+	header('location:./../');
 }
 if($_SESSION['level'] != 'ormawa'){
 	header('location:./../404.html');
 }
+$usr_id = $_SESSION['id'];
 require_once('../fa-config.php');
+$usr = $mysqli->query("SELECT nama FROM user WHERE id_user = '$usr_id'");
+$the_name = $usr->fetch_assoc();
+$get_name = $the_name['nama'];
 
 ?>
 <!DOCTYPE html>

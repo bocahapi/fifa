@@ -14,118 +14,48 @@ if( !isset($_SESSION['login'])) {
 <h3 class="title">Infomasi Dana</h3>
 <div class="clearfix">
    <div class="row">
-        <form action="" role="form" class="col-md-4">
-                  
-                       <select name="" id="" class="form-control input-sm">
-                           <option value="#">Operasional BEM</option>
-                           <option value="#">Penelitian dan Pengapdian Masyarakat</option>
-                       </select>
+        <form action="query/query.php" method="post" class="col-md-6 s">
+                  <input type="hidden" name="act" value="info-dana">
+                  <input type="hidden" name="usr" value="<?php echo $usr_id;?>">
+                   <select name="jenis_dana" id="" class="form-control">
+                       <option value="">Pilih Jenis Dana</option>
+                       <?php
+                       $stmt = $mysqli->query("SELECT * FROM jenis_dana");
+                       while($jenis_dana = $stmt->fetch_assoc()){
+                        echo "<option value=\"{$jenis_dana['id_jenis']}\">{$jenis_dana['nama_jenis']}</option>"; 
+                       }
+                       $stmt->free();
+                       ?>
+                   </select>
        
            <div class="s text-right">
-               <button class="btn btn-primary">Lihat</button>
+               <div class="btn btn-primary btn-sm lihat">Lihat</div>
            </div>
        </form>
    </div>
 </div>
-
 <hr>
-    <table class="table-form">
-        <tr>
-            <th colspan="3">Nalar</th>
-        </tr>
-        <tr>
-            <td>Jumlah Total Dana</td>
-            <td>:</td>
-            <td>
-                <input type="text" class="form-control" placeholder="placeholder">
-            </td>
-        </tr>
-        <tr>
-            <td>Dana Pakai</th>
-            <td>:</td>
-            <td>
-                <input type="text" class="form-control" placeholder="placeholder">
-            </td>
-        </tr>
-        <tr>
-            <td>Sisa Dana</th>
-            <td>:</td>
-            <td>
-                <input type="text" class="form-control" placeholder="placeholder">
-            </td>
-        </tr>
+<!-- view Dana -->
+<div class="data-view"></div>
+<!-- view Dana -->
 
-        <tr>
-            <th colspan="3">Non Nalar</th>
-        </tr>
-        <tr>
-            <td>Jumlah Total Dana</td>
-            <td>:</td>
-            <td>
-                <input type="text" class="form-control" placeholder="placeholder">
-            </td>
-        </tr>
-        <tr>
-            <td>Dana Pakai</th>
-            <td>:</td>
-            <td>
-                <input type="text" class="form-control" placeholder="placeholder">
-            </td>
-        </tr>
-        <tr>
-            <td>Sisa Dana</th>
-            <td>:</td>
-            <td>
-                <input type="text" class="form-control" placeholder="placeholder">
-            </td>
-        </tr>
-
-        <tr>
-            <th colspan="3">Reor</th>
-        </tr>
-        <tr>
-            <td>Jumlah Total Dana</td>
-            <td>:</td>
-            <td>
-                <input type="text" class="form-control" placeholder="placeholder">
-            </td>
-        </tr>
-        <tr>
-            <td>Dana Pakai</th>
-            <td>:</td>
-            <td>
-                <input type="text" class="form-control" placeholder="placeholder">
-            </td>
-        </tr>
-        <tr>
-            <td>Sisa Dana</th>
-            <td>:</td>
-            <td>
-                <input type="text" class="form-control" placeholder="placeholder">
-            </td>
-        </tr>
-    
-    </table>
-
-<hr>
-<table class="table table-bordered">
-    <tr>
-        <th>Nomor</th>
-        <th class="text-center">Tanggal</th>
-        <th>User</th>
-        <th>Jenis Dana</th>
-        <th class="text-center">Aksi</th>
-    </tr>
-    <tr>
-        <td>1</td>
-        <td class="text-center">25/2/13</td>
-        <td>BEM FKI</td>
-        <td>Operasional</td>
-        <td class="text-center">
-            <a href="#"><span class="glyphicon glyphicon-eye-open"></span></a>
-            <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-            <a href="#"><span class="glyphicon glyphicon-trash"></span></a>
-        </td>
-    </tr>
-</table>
 </div>
+
+<script>
+    jQuery('.lihat').click(function(event) {
+        var parn = $(this).parents('form');
+        var Url  = parn.attr('action');
+
+        var DataSend = parn.serialize();
+
+        $.ajax({
+            url:Url,
+            type:'post',
+            data:DataSend,
+            success:function(result){
+                jQuery('.data-view').html(result);
+            }
+        });
+        return false;
+    });
+</script>

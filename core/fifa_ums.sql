@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 12, 2014 at 09:59 AM
+-- Generation Time: Mar 14, 2014 at 06:31 PM
 -- Server version: 5.5.35
 -- PHP Version: 5.3.10-1ubuntu3.10
 
@@ -62,7 +62,19 @@ CREATE TABLE IF NOT EXISTS `informasi_dana` (
   KEY `id_total_dana_2` (`id_total_dana`),
   KEY `id_kelola_dana` (`id_kelola_dana`),
   KEY `id_kelola_dana_2` (`id_kelola_dana`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+
+--
+-- Dumping data for table `informasi_dana`
+--
+
+INSERT INTO `informasi_dana` (`id_informasi_dana`, `id_user`, `id_jenis`, `id_sub`, `id_total_dana`, `id_kelola_dana`, `sisa_dana`) VALUES
+(7, 8, 3, 7, 55, 49, 7000000),
+(8, 8, 3, 12, 56, 50, 9400000),
+(9, 8, 3, 13, 57, 51, 9300000),
+(10, 8, 3, 7, 55, 52, 6700000),
+(11, 8, 3, 12, 56, 53, 9200000),
+(12, 8, 3, 13, 57, 54, 8800000);
 
 -- --------------------------------------------------------
 
@@ -95,14 +107,18 @@ CREATE TABLE IF NOT EXISTS `jenis_dana` (
   `id_jenis` int(11) NOT NULL AUTO_INCREMENT,
   `nama_jenis` varchar(145) NOT NULL,
   PRIMARY KEY (`id_jenis`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `jenis_dana`
 --
 
 INSERT INTO `jenis_dana` (`id_jenis`, `nama_jenis`) VALUES
-(1, 'Dana Operasional');
+(3, 'Operasional BEM'),
+(4, 'Penelitian dan Pengabdian Masyarakat'),
+(5, 'Pengembangan'),
+(6, 'Delegasi'),
+(7, 'Penerbitan');
 
 -- --------------------------------------------------------
 
@@ -117,7 +133,8 @@ CREATE TABLE IF NOT EXISTS `kelola_dana` (
   `id_sub` int(11) NOT NULL,
   `jenis_kegiatan` varchar(200) NOT NULL,
   `input_dana` int(11) NOT NULL,
-  `tgl_kelola_dana` date NOT NULL,
+  `tgl_kelola_dana` varchar(150) NOT NULL,
+  `tahun` year(4) NOT NULL,
   PRIMARY KEY (`id_kelola_dana`),
   KEY `id_kelola_dana` (`id_kelola_dana`,`id_user`,`id_jenis`,`id_sub`),
   KEY `id_jenis` (`id_jenis`),
@@ -125,7 +142,19 @@ CREATE TABLE IF NOT EXISTS `kelola_dana` (
   KEY `jenis_kegiatan_2` (`jenis_kegiatan`),
   KEY `id_sub` (`id_sub`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=55 ;
+
+--
+-- Dumping data for table `kelola_dana`
+--
+
+INSERT INTO `kelola_dana` (`id_kelola_dana`, `id_user`, `id_jenis`, `id_sub`, `jenis_kegiatan`, `input_dana`, `tgl_kelola_dana`, `tahun`) VALUES
+(49, 8, 3, 7, 'Q', 3000000, '13/03', 2014),
+(50, 8, 3, 12, 'R', 600000, '13/03', 2014),
+(51, 8, 3, 13, 'Y', 700000, '13/03', 2014),
+(52, 8, 3, 7, 'Y', 300000, '14/03', 2014),
+(53, 8, 3, 12, 'I', 200000, '14/03', 2014),
+(54, 8, 3, 13, 'P', 500000, '14/03', 2014);
 
 -- --------------------------------------------------------
 
@@ -155,11 +184,12 @@ CREATE TABLE IF NOT EXISTS `proker` (
   `id_proker` int(11) NOT NULL AUTO_INCREMENT,
   `id_user` int(11) NOT NULL,
   `nama_file` varchar(145) NOT NULL,
-  `tgl_proker` date NOT NULL,
-  `status` enum('setuju','tidak') NOT NULL,
+  `tgl_proker` varchar(20) NOT NULL,
+  `url` text NOT NULL,
+  `status` enum('setuju','tidak') DEFAULT NULL,
   PRIMARY KEY (`id_proker`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -174,16 +204,28 @@ CREATE TABLE IF NOT EXISTS `sub_dana` (
   PRIMARY KEY (`id_sub`),
   KEY `id_jenis` (`id_jenis`),
   KEY `id_jenis_2` (`id_jenis`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 --
 -- Dumping data for table `sub_dana`
 --
 
 INSERT INTO `sub_dana` (`id_sub`, `nama_sub`, `id_jenis`) VALUES
-(1, 'Nalar', 1),
-(2, 'Non Nalar', 1),
-(3, 'Reor', 1);
+(7, 'Nalar', 3),
+(8, 'Nalar', 4),
+(9, 'Nalar', 5),
+(10, 'Nalar', 6),
+(11, 'Nalar', 7),
+(12, 'Non Nalar', 3),
+(13, 'Reor', 3),
+(14, 'Non Nalar', 4),
+(15, 'Reor', 4),
+(16, 'Non Nalar', 5),
+(17, 'Reor', 5),
+(18, 'Non Nalar', 6),
+(19, 'Reor', 6),
+(20, 'Non Nalar', 7),
+(21, 'Reor', 7);
 
 -- --------------------------------------------------------
 
@@ -205,19 +247,16 @@ CREATE TABLE IF NOT EXISTS `total_dana` (
   KEY `id_sub` (`id_sub`),
   KEY `total_dana` (`total_dana`),
   KEY `id_jenis` (`id_jenis`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=55 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=58 ;
 
 --
 -- Dumping data for table `total_dana`
 --
 
 INSERT INTO `total_dana` (`id_total_dana`, `id_user`, `id_jenis`, `id_sub`, `total_dana`, `tgl_total_dana`, `tahun`) VALUES
-(43, 3, 1, 1, 764764, '11/03', 2013),
-(44, 3, 1, 2, 574869, '11/03', 2013),
-(45, 3, 1, 3, 6536789, '11/03', 2013),
-(52, 3, 1, 1, 9780000, '11/03', 2014),
-(53, 3, 1, 2, 96968987, '11/03', 2014),
-(54, 3, 1, 3, 32499690, '11/03', 2014);
+(55, 8, 3, 7, 10000000, '14/03', 2014),
+(56, 8, 3, 12, 10000000, '14/03', 2014),
+(57, 8, 3, 13, 10000000, '14/03', 2014);
 
 -- --------------------------------------------------------
 

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="MySql" id="Project3879145" database="MySql" >
+	<schema name="fifa_ums" catalogname="fifa_ums" defo="y" >
+		<table name="informasi" >
+			<column name="id_informasi" type="int" length="10" jt="4" mandatory="y" autoincrement="y" />
+			<column name="judul" type="varchar" length="200" jt="12" mandatory="y" />
+			<column name="isi" type="text" length="65535" jt="-1" mandatory="y" />
+			<index name="pk_informasi" unique="PRIMARY_KEY" >
+				<column name="id_informasi" />
+			</index>
+		</table>
+		<table name="informasi_dana" >
+			<column name="id_informasi_dana" type="int" length="10" jt="4" mandatory="y" autoincrement="y" />
+			<column name="id_user" type="int" length="10" jt="4" mandatory="y" />
+			<column name="id_jenis" type="int" length="10" jt="4" mandatory="y" />
+			<column name="id_sub" type="int" length="10" jt="4" mandatory="y" />
+			<column name="id_total_dana" type="int" length="10" jt="4" mandatory="y" />
+			<column name="id_kelola_dana" type="int" length="10" jt="4" mandatory="y" />
+			<column name="sisa_dana" type="int" length="10" jt="4" mandatory="y" />
+			<index name="pk_informasi_dana" unique="PRIMARY_KEY" >
+				<column name="id_informasi_dana" />
+			</index>
+			<index name="id_user" unique="NORMAL" >
+				<column name="id_user" />
+				<column name="id_jenis" />
+				<column name="id_sub" />
+				<column name="id_total_dana" />
+				<column name="id_kelola_dana" />
+			</index>
+			<index name="id_jenis" unique="NORMAL" >
+				<column name="id_jenis" />
+			</index>
+			<index name="id_sub" unique="NORMAL" >
+				<column name="id_sub" />
+			</index>
+			<fk name="informasi_dana_ibfk_2" to_schema="fifa_ums" to_table="jenis_dana" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_jenis" pk="id_jenis" />
+			</fk>
+			<fk name="informasi_dana_ibfk_5" to_schema="fifa_ums" to_table="kelola_dana" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_kelola_dana" pk="id_kelola_dana" />
+			</fk>
+			<fk name="informasi_dana_ibfk_3" to_schema="fifa_ums" to_table="sub_dana" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_sub" pk="id_sub" />
+			</fk>
+			<fk name="informasi_dana_ibfk_4" to_schema="fifa_ums" to_table="total_dana" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_total_dana" pk="id_total_dana" />
+			</fk>
+			<fk name="informasi_dana_ibfk_1" to_schema="fifa_ums" to_table="user" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_user" pk="id_user" />
+			</fk>
+		</table>
+		<table name="jabatan" >
+			<column name="id_jabatan" type="int" length="10" jt="4" mandatory="y" autoincrement="y" />
+			<column name="jabatan" type="varchar" length="11" jt="12" mandatory="y" />
+			<index name="pk_jabatan" unique="PRIMARY_KEY" >
+				<column name="id_jabatan" />
+			</index>
+		</table>
+		<table name="jenis_dana" >
+			<column name="id_jenis" type="int" length="10" jt="4" mandatory="y" autoincrement="y" />
+			<column name="nama_jenis" type="varchar" length="145" jt="12" mandatory="y" />
+			<index name="pk_jenis_dana" unique="PRIMARY_KEY" >
+				<column name="id_jenis" />
+			</index>
+		</table>
+		<table name="kelola_dana" >
+			<column name="id_kelola_dana" type="int" length="10" jt="4" mandatory="y" autoincrement="y" />
+			<column name="id_user" type="int" length="10" jt="4" mandatory="y" />
+			<column name="id_jenis" type="int" length="10" jt="4" mandatory="y" />
+			<column name="id_sub" type="int" length="10" jt="4" mandatory="y" />
+			<column name="jenis_kegiatan" type="varchar" length="200" jt="12" mandatory="y" />
+			<column name="input_dana" type="int" length="10" jt="4" mandatory="y" />
+			<column name="tgl_kelola_dana" type="varchar" length="150" jt="12" mandatory="y" />
+			<column name="tahun" type="year" jt="91" mandatory="y" />
+			<index name="pk_kelola_dana" unique="PRIMARY_KEY" >
+				<column name="id_kelola_dana" />
+			</index>
+			<index name="id_kelola_dana" unique="NORMAL" >
+				<column name="id_kelola_dana" />
+				<column name="id_user" />
+				<column name="id_jenis" />
+				<column name="id_sub" />
+			</index>
+			<index name="id_jenis" unique="NORMAL" >
+				<column name="id_jenis" />
+			</index>
+			<index name="id_sub" unique="NORMAL" >
+				<column name="id_sub" />
+			</index>
+			<index name="id_user" unique="NORMAL" >
+				<column name="id_user" />
+			</index>
+			<fk name="kelola_dana_ibfk_2" to_schema="fifa_ums" to_table="jenis_dana" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_jenis" pk="id_jenis" />
+			</fk>
+			<fk name="kelola_dana_ibfk_3" to_schema="fifa_ums" to_table="sub_dana" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_sub" pk="id_sub" />
+			</fk>
+			<fk name="kelola_dana_ibfk_1" to_schema="fifa_ums" to_table="user" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_user" pk="id_user" />
+			</fk>
+		</table>
+		<table name="link" >
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="url" type="varchar" length="145" jt="12" mandatory="y" />
+		</table>
+		<table name="proker" >
+			<column name="id_proker" type="int" length="10" jt="4" mandatory="y" autoincrement="y" />
+			<column name="id_user" type="int" length="10" jt="4" mandatory="y" />
+			<column name="nama_file" type="varchar" length="145" jt="12" mandatory="y" />
+			<column name="tgl_proker" type="varchar" length="20" jt="12" mandatory="y" />
+			<column name="url" type="text" length="65535" jt="-1" mandatory="y" />
+			<column name="status" type="enum" length="7" jt="12" >
+				<enumeration>&#039;setuju&#039;,&#039;tidak&#039;</enumeration>
+			</column>
+			<index name="pk_proker" unique="PRIMARY_KEY" >
+				<column name="id_proker" />
+			</index>
+			<index name="id_user" unique="NORMAL" >
+				<column name="id_user" />
+			</index>
+		</table>
+		<table name="sub_dana" >
+			<column name="id_sub" type="int" length="10" jt="4" mandatory="y" autoincrement="y" />
+			<column name="nama_sub" type="varchar" length="145" jt="12" mandatory="y" />
+			<column name="id_jenis" type="int" length="10" jt="4" mandatory="y" />
+			<index name="pk_sub_dana" unique="PRIMARY_KEY" >
+				<column name="id_sub" />
+			</index>
+			<fk name="sub_dana_ibfk_1" to_schema="fifa_ums" to_table="jenis_dana" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_jenis" pk="id_jenis" />
+			</fk>
+		</table>
+		<table name="total_dana" >
+			<column name="id_total_dana" type="int" length="10" jt="4" mandatory="y" autoincrement="y" />
+			<column name="id_user" type="int" length="10" jt="4" mandatory="y" />
+			<column name="id_jenis" type="int" length="10" jt="4" mandatory="y" />
+			<column name="id_sub" type="int" length="10" jt="4" mandatory="y" />
+			<column name="total_dana" type="int" length="10" jt="4" mandatory="y" />
+			<column name="tgl_total_dana" type="varchar" length="20" jt="12" mandatory="y" />
+			<column name="tahun" type="year" jt="91" mandatory="y" />
+			<index name="pk_total_dana" unique="PRIMARY_KEY" >
+				<column name="id_total_dana" />
+			</index>
+			<index name="id_user" unique="NORMAL" >
+				<column name="id_user" />
+				<column name="id_jenis" />
+				<column name="id_sub" />
+			</index>
+			<index name="id_user_2" unique="NORMAL" >
+				<column name="id_user" />
+			</index>
+			<index name="id_sub" unique="NORMAL" >
+				<column name="id_sub" />
+			</index>
+			<index name="total_dana" unique="NORMAL" >
+				<column name="total_dana" />
+			</index>
+			<index name="id_jenis" unique="NORMAL" >
+				<column name="id_jenis" />
+			</index>
+			<fk name="total_dana_ibfk_2" to_schema="fifa_ums" to_table="jenis_dana" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_jenis" pk="id_jenis" />
+			</fk>
+			<fk name="total_dana_ibfk_3" to_schema="fifa_ums" to_table="sub_dana" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_sub" pk="id_sub" />
+			</fk>
+			<fk name="total_dana_ibfk_1" to_schema="fifa_ums" to_table="user" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_user" pk="id_user" />
+			</fk>
+		</table>
+		<table name="user" >
+			<column name="id_user" type="int" length="10" jt="4" mandatory="y" autoincrement="y" />
+			<column name="username" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="password" type="varchar" length="145" jt="12" mandatory="y" />
+			<column name="nama" type="varchar" length="145" jt="12" mandatory="y" />
+			<column name="id_jabatan" type="int" length="10" jt="4" mandatory="y" />
+			<index name="pk_user" unique="PRIMARY_KEY" >
+				<column name="id_user" />
+			</index>
+			<index name="id_jabatan" unique="NORMAL" >
+				<column name="id_jabatan" />
+			</index>
+			<fk name="user_ibfk_1" to_schema="fifa_ums" to_table="jabatan" delete_action="cascade" update_action="cascade" >
+				<fk_column name="id_jabatan" pk="id_jabatan" />
+			</fk>
+		</table>
+	</schema>
+	<connector name="MySql" database="MySql" driver_class="com.mysql.jdbc.Driver" driver_jar="mysql-connector-java-5.1.25-bin.jar" host="localhost" port="3306" instance="fifa_ums" user="root" passwd="cm9vdA==" schema_mapping="" />
+	<layout id="Layout3895025" name="fifa_ums" show_relation_columns="y" >
+		<entity schema="fifa_ums" name="informasi" color="d6f7d0" x="390" y="120" />
+		<entity schema="fifa_ums" name="informasi_dana" color="d6f7d0" x="390" y="495" />
+		<entity schema="fifa_ums" name="jabatan" color="f7e6d0" x="765" y="330" />
+		<entity schema="fifa_ums" name="jenis_dana" color="d6f7d0" x="45" y="270" />
+		<entity schema="fifa_ums" name="kelola_dana" color="d6f7d0" x="210" y="270" />
+		<entity schema="fifa_ums" name="proker" color="d6f7d0" x="390" y="270" />
+		<entity schema="fifa_ums" name="sub_dana" color="f7e6d0" x="915" y="330" />
+		<entity schema="fifa_ums" name="total_dana" color="f7e6d0" x="765" y="120" />
+		<entity schema="fifa_ums" name="user" color="f7e6d0" x="615" y="330" />
+		<entity schema="fifa_ums" name="link" color="d6f7d0" x="285" y="120" />
+		<group name="jabatan" color="faf6f0" >
+			<comment>Used by : 
+   kelola_dana</comment>
+			<entity schema="fifa_ums" name="jabatan" />
+			<entity schema="fifa_ums" name="user" />
+			<entity schema="fifa_ums" name="sub_dana" />
+			<entity schema="fifa_ums" name="total_dana" />
+			<callout x="705" y="45" pointer="SV" />
+		</group>
+		<group name="kelola_dana" color="f2faf0" >
+			<comment>Used by : 
+   jabatan</comment>
+			<entity schema="fifa_ums" name="kelola_dana" />
+			<entity schema="fifa_ums" name="jenis_dana" />
+			<entity schema="fifa_ums" name="proker" />
+			<entity schema="fifa_ums" name="link" />
+			<entity schema="fifa_ums" name="informasi" />
+			<entity schema="fifa_ums" name="informasi_dana" />
+			<callout x="150" y="45" pointer="SV" />
+		</group>
+	</layout>
+</project>

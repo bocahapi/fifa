@@ -28,9 +28,10 @@ $pass = $_POST['pass'];
 
 	if($check->num_rows == 1){
 
-		$get_lvl = $check->fetch_assoc();
-		$lvl_id = $get_lvl['id_jabatan'];
-
+		$get_lvl   = $check->fetch_assoc();
+		$lvl_id    = $get_lvl['id_jabatan'];
+		$user_id   = $get_lvl['id_user'];
+ 
 		# Check Level User
 		$stmt = $mysqli->prepare("SELECT jabatan FROM jabatan WHERE id_jabatan = ?");
 		$stmt->bind_param('i',$lvl_id);
@@ -44,7 +45,13 @@ $pass = $_POST['pass'];
 		# Membuat Session
 		$_SESSION['login'] = true;
 
-		$_SESSION['level'] = $level;
+		if($lvl_id !=1 || $lvl_id !=2 ){
+
+		$_SESSION['id']  = $user_id;
+
+		}
+
+ 		$_SESSION['level'] = $level;
 
 		#menuju halaman Panel
 		print($level.'/dashboard.php?#');

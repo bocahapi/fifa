@@ -21,20 +21,21 @@ if( !isset($_SESSION['login'])) {
             <th>Jenis Kegiatan</th>
             <th>Penggunaan Dana</th>
         </tr>
-        <tr>
-            <td>1</td>
-            <td>15/3/13</td>
-            <td>Operasional</td>
-            <td>Seminar Teknologi</td>
-            <td>Rp. 1.000.000</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>15/3/13</td>
-            <td>Operasional</td>
-            <td>Seminar Teknologi</td>
-            <td>Rp. 1.000.000</td>
-        </tr>
-
+        <?php
+        $no =1;
+        $sql = "SELECT * FROM kelola_dana,jenis_dana WHERE kelola_dana.id_jenis = jenis_dana.id_jenis AND kelola_dana.id_user='$usr_id' ORDER BY tgl_kelola_dana DESC";
+        $query = $mysqli->query($sql);
+        while ($rekap = $query->fetch_assoc()) {
+            echo "<tr>"
+                 ."<td>{$no}</td>"
+                 ."<td>{$rekap['tgl_kelola_dana']}/{$rekap['tahun']}</td>"
+                 ."<td>{$rekap['nama_jenis']}</td>"
+                 ."<td>{$rekap['jenis_kegiatan']}</td>"
+                 ."<td class=\"text-right\">Rp. ".number_format($rekap['input_dana'],0,',','.')."</td>"
+                 ."</tr>";
+            $no++;
+        }
+        
+        ?>
     </table>
 </div>

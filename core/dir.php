@@ -33,6 +33,8 @@ function home_url(){
 	$site_main = $protocol.$main.'/'.$main_site;
 	return $site_main;
 }
+
+
 # auto Update Name Site
 $stmt = $mysqli->prepare("UPDATE link SET url = ? WHERE name= 'site' ");
 $stmt->bind_param('s',$site);
@@ -45,11 +47,17 @@ $Query = $mysqli->query("SELECT url FROM link WHERE name= 'site' ");
 $sites = $Query->fetch_assoc();
 $url   = $sites['url'];
 
+$main_root = dirname(dirname(__FILE__));
 
 /* Direktori */
 function the_core(){
 	global $url;
 	return $url.'/core';
+}
+
+function Upload(){
+	global $main_root;
+	return $main_root.'/upload';
 }
 
 
@@ -99,3 +107,4 @@ function footer(){
 	global $credit;
 	echo $credit;
 }
+
