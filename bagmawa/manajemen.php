@@ -15,6 +15,14 @@ if( !isset($_SESSION['login'])) {
         <!-- Manajemen Jenis Dana -->
 <div class="content">
     <h3 class="title">Manajemen Jenis Data</h3>
+
+    <!-- alert -->
+    <div class="alert alert-danger" style="display:none">
+      <button type="button" class="close" >&times;</button>
+      <strong>Ups!</strong> <span>ada Form yang lupa Anda Isi. Mohon cek kembali.</span>
+    </div>
+    <!-- alert -->
+
     <!-- Tab Menu -->
     <ul class="nav nav-tabs" id="navigations">
       <li class="active"><a href="#jenis-dana" data-toggle="tab">Nama Jenis Dana</a></li>
@@ -26,10 +34,10 @@ if( !isset($_SESSION['login'])) {
         <div class="row">
             <div class="form-group">
             <br>
-                <form action="query/query.php" method="post" class="col-md-5 s">
+                <form class="col-md-5 s jd">
                     <input type="hidden" name="act" value="jd">
                     <input type="text" name="jenis_dana" class="form-control" placeholder="Nama Jenis Dana"><br>
-                    <button class="btn btn-primary btn-sm">Simpan</button>
+                    <div class="btn btn-primary btn-sm simpan-jd">Simpan</div>
                 </form>
             </div>
         </div>
@@ -39,7 +47,7 @@ if( !isset($_SESSION['login'])) {
         <div class="row">
            <div class="form-group">
            <br>
-                <form action="query/query.php" method="post" class="col-md-5 s">
+                <form class="col-md-5 s sb">
                   <input type="hidden" name="act" value="sd">
                    <select name="jenis_dana" id="" class="form-control">
                        <option value="">Pilih Jenis Dana</option>
@@ -51,12 +59,9 @@ if( !isset($_SESSION['login'])) {
                        $stmt->free();
                        ?>
                    </select> <br>
-                   <select name="sub_dana" id="" class="form-control">
-                       <option value="Nalar">Nalar</option>
-                       <option value="Non Nalar">Non Nalar</option>
-                       <option value="Reor">Reor</option>
-                   </select> <br>
-                   <button class="btn btn-primary btn-sm">Simpan</button>
+                   <input type="text" name="sub_dana" id="" class="form-control" placeholder="Nama Sub Dana">
+                   <br>
+                   <div class="btn btn-primary btn-sm simpan-sb">Simpan</div>
                </form>
            </div>
         </div>
@@ -107,6 +112,68 @@ if( !isset($_SESSION['login'])) {
 <script>
   jQuery(function($){
 
+    /*
+    jQuery Trigger
+    ref : http://stackoverflow.com/questions/6245046/run-jquery-ajax-when-hitting-enter-return
+    */
+
+    jQuery('form').bind('submit',function(event) {
+      
+        $(this).find('div.btn').trigger('click');
+
+        event.preventDefault();
+    });
+
+
+    var hash = jQuery(location).attr('hash');
+
+    if( hash != ''){
+
+      jQuery('.nav-tabs a[href="'+hash+'"]').tab('show');    
+
+    }
+
+    /*
+      Ajax untuk menyimpan data
+    */
+   jQuery('.simpan-jd,.simpan-sb').click(function(event) {
+     
+     var form = $(this).parents('form');
+     var ID   = $(this).parents('.tab-pane').attr('id');
+     var URL  = 'query/query.php';
+     var DataSend = form.serialize();
+
+     $.ajax({
+        url:URL,
+        type:'post',
+        data:DataSend,
+        success:function(result){
+          if(result != 'sukses'){
+
+            jQuery('.alert > span').html(result);
+
+            jQuery('.alert').fadeIn(400);
+
+          }else{
+
+            location.reload(true);
+
+          }
+
+        }
+     });
+
+     return false;
+     event.preventDefault();
+   });
+
+   // Close Alert
+   jQuery('.close').click(function(event) {
+     $(this).parents('.alert').fadeOut(400);
+     event.preventDefault();
+   });
+
+
     // perintah untuk kolom aksi
     jQuery('.aksi a').click(function(event) {
         /*
@@ -128,8 +195,10 @@ if( !isset($_SESSION['login'])) {
 
 
                 if (act == 'men-delete') {
-                
+                    
+                    // Refresh Halaman
                     location.reload(true);
+
                 }else if( act == "men-edit"){
                 
                 $('#edit').find('.modal-body').html(result);
@@ -175,6 +244,8 @@ if( !isset($_SESSION['login'])) {
 
             });
             return false;
+
+      event.preventDefault();
     });
   });
 </script>

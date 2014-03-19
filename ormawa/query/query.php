@@ -33,8 +33,7 @@ switch ($parameter) {
 		* ref : http://www.w3schools.com/php/php_file_upload.asp
 		*/
 		$data      = $_FILES['proker'];
-		print_r($data);
-		exit;
+
 		$max_size  = 200000; // 2MB
 		$title     = $data['name'];
 		$get	   = explode('.', $title);

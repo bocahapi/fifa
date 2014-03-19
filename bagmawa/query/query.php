@@ -27,14 +27,20 @@ switch($parameter){
 	# Halaman Manajemen Jenis dana (bag. Jenis Dana)
 	case 'jd':
 		$jenis = $_POST['jenis_dana'];
+
+		if($jenis == '' || empty($jenis) ){
+			echo "ada Form yang lupa Anda Isi. Mohon cek kembali.";
+			exit;
+		}
+
 		$sql   = "INSERT INTO `jenis_dana` (nama_jenis) values ('$jenis')";
 		$res   = $mysqli->query($sql);
 		if($res){
-			header('location:./../dashboard.php?page=manajemen#');
-			//echo "sukses";
+			//header('location:./../dashboard.php?page=manajemen#jenis-dana');
+			echo "sukses";
 		}else{
-			header('location:./../dashboard.php?page=manajemen#ERROR');
-			//echo "error";
+			//header('location:./../dashboard.php?page=manajemen#ERROR');
+			echo "Gagal Input, ulangi beberapa saat lagi";
 		}
 	break;
 
@@ -42,15 +48,21 @@ switch($parameter){
 	case 'sd':
 		$jenis = $_POST['jenis_dana'];
 		$sub   = $_POST['sub_dana'];
+
+		if( $jenis == "" || empty($jenis) || $sub == "" || empty($sub) ){
+			echo "ada Form yang lupa Anda Isi. Mohon cek kembali.";
+			exit;
+		}
+
 		$sql   = "INSERT INTO `sub_dana` (nama_sub,id_jenis) VALUES ('$sub','$jenis') ";
 		$res   = $mysqli->query($sql);
 
 		if($res){
-			header('location:./../dashboard.php?page=manajemen#');
-			//echo "sukses";
+			//header('location:./../dashboard.php?page=manajemen#sub-dana');
+			echo "sukses";
 		}else{
-			header('location:./../dashboard.php?page=manajemen#ERROR');
-			//echo "error";
+			//header('location:./../dashboard.php?page=manajemen#ERROR');
+			echo "Gagal Input, ulangi beberapa saat lagi";
 		}
 	break;
 

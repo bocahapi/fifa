@@ -22,7 +22,7 @@ if( !isset($_SESSION['login'])) {
                 <td>:</td>
                 <td>
                     <input type="hidden" name="act" value="pengelola">
-                    <select name="user" id="" class="form-control input-sm">
+                    <select name="user" id="usr" class="form-control input-sm">
                         <option value="">Pilih User</option>
                     <?php
                     $sql = "SELECT id_user,nama FROM `user` WHERE id_jabatan !='1' AND id_jabatan != '2' ";
@@ -40,7 +40,7 @@ if( !isset($_SESSION['login'])) {
                 <td>Jenis Dana</td>
                 <td>:</td>
                 <td>
-                    <select name="dana" id="" class="form-control input-sm">
+                    <select name="dana" id="jd" class="form-control input-sm">
                         <option value="">Pilih Jenis Dana</option>
                         <?php
                            
@@ -53,6 +53,9 @@ if( !isset($_SESSION['login'])) {
                     
                     </select>
                 </td>
+            </tr>
+            <tr class="dana-diambil">
+                
             </tr>
         </table>
         <div class="s text-right">
@@ -83,7 +86,7 @@ if( !isset($_SESSION['login'])) {
 
         <?php
         $no = 1;
-        $sql  = "SELECT DISTINCT kelola_dana.id_user,kelola_dana.id_jenis,kelola_dana.tgl_kelola_dana,kelola_dana.tahun,user.nama,jenis_dana.nama_jenis FROM kelola_dana,user,jenis_dana WHERE kelola_dana.id_user = user.id_user AND kelola_dana.id_jenis = jenis_dana.id_jenis " ;
+        $sql  = "SELECT * FROM kelola_dana,user,jenis_dana WHERE kelola_dana.id_user = user.id_user AND kelola_dana.id_jenis = jenis_dana.id_jenis " ;
         $stmt = $mysqli->query($sql);
         while ($list_dana = $stmt->fetch_assoc()) {
             echo "<tr>"
@@ -92,9 +95,9 @@ if( !isset($_SESSION['login'])) {
                 ."<td>{$list_dana['nama']}</td>"
                 ."<td>{$list_dana['nama_jenis']}</td>"
                 ."<td class=\"text-center aksi\">"
-                    ."<a href=\"#\" data-id=\"{$list_dana['id_user']}-{$list_dana['id_jenis']}-{$list_dana['tgl_kelola_dana']}-{$list_dana['tahun']}\" data-act=\"lihat\" class=\"act\"><span class=\"glyphicon glyphicon-eye-open\"></span></a>"
-                    ."<a href=\"#\" data-id=\"{$list_dana['id_user']}-{$list_dana['id_jenis']}-{$list_dana['tgl_kelola_dana']}-{$list_dana['tahun']}\" data-act=\"edit\" class=\"act\"><span class=\"glyphicon glyphicon-pencil\"></span></a>"
-                    ."<a href=\"#\" data-id=\"{$list_dana['id_user']}-{$list_dana['id_jenis']}-{$list_dana['tgl_kelola_dana']}-{$list_dana['tahun']}\" data-act=\"delete\" class=\"act\"><span class=\"glyphicon glyphicon-trash\"></span></a>"
+                    ."<a href=\"#\" data-id=\"{$list_dana['id_kelola_dana']}\" data-act=\"lihat\" class=\"act\"><span class=\"glyphicon glyphicon-eye-open\"></span></a>"
+                    ."<a href=\"#\" data-id=\"{$list_dana['id_user']}-{$list_dana['id_jenis']}-{$list_dana['tgl_kelola_dana']}-{$list_dana['tahun']}-{$list_dana['id_kelola_dana']}\" data-act=\"edit\" class=\"act\"><span class=\"glyphicon glyphicon-pencil\"></span></a>"
+                    ."<a href=\"#\" data-id=\"{$list_dana['id_kelola_dana']}\" data-act=\"delete\" class=\"act\"><span class=\"glyphicon glyphicon-trash\"></span></a>"
                 ."</td>"
                 ."</tr>";
             $no++;    
@@ -108,11 +111,40 @@ if( !isset($_SESSION['login'])) {
 
 <script>
 jQuery(function($){
+    jQuery('#jd').change(function(e){
+        
+        if( jQuery('#usr').val() != '' ){
+            var id_jenis = $('#usr').val();
+
+            $.ajax({
+                url :'query/_query.php',
+                type:'post',
+                data:{act:'_kelola',id_jenis:id_jenis},
+                success:function(result){
+                    jQuery('tr.dana-diambil').html(result);
+                }
+            });return false;
+
+        }else{
+            alert('mohon Pilih user');
+        }
+        e.preventDefault();
+    });
+
+    /*
+    mengembalikan select box jenis dana ke posisi awal / reset
+    */
+    jQuery('#usr').click(function(e){
+        e.preventDefault();
+        jQuery('#jd').prop('selectedIndex',0);
+    });
+
     jQuery('.lihat').parents('form').keyup(function(event) {
         if( event.keyCode == 13 ){
         jQuery('.lihat').trigger('click');        
         }
     });
+
     // perintah untuk kolom aksi
     jQuery('.aksi a').click(function(event) {
         /*
@@ -131,10 +163,9 @@ jQuery(function($){
             type:'post',
             data:{act:act,id:id},
             success:function(result){
-                console.log(result);
 
                 if (act == 'delete') {
-                
+                    
                     location.reload(true);
                 
                 }else if (act == 'edit') {
@@ -160,27 +191,26 @@ jQuery(function($){
                             ref : http://www.w3schools.com/js/js_obj_regexp.asp 
                                   http://www.w3schools.com/jsref/jsref_obj_regexp.asp
                         */
-                        numb.each(function() {
+                        
 
                             var patrn = new RegExp('[0-9]');
 
-                            var value = $(this).val();
-                            
-                            if(patrn.test(value) === false){
-                            
-                                $('.alert-danger').html('<p><b><i>Parameter yang Anda Masukan Bukan angka</i></b></p>').removeClass('hide');
+                            var value =  numb.val();
+
+                        
+                                if(patrn.test(value) == false ){
                                 
-                                $(this).css('border', '1px solid red');  
-
-                            }else{
-                 
-                                $('.alert-danger').html('').hide();
-                 
-                                $(this).attr('data-val','true');
-                            }
+                                    $('.alert-danger').html('<p><b><i>Parameter yang Anda Masukan Bukan angka</i></b></p>').removeClass('hide');
+                                    
+                                    numb.css('border', '1px solid red');  
 
 
-                        });
+                                }else{
+                     
+                                    $('.alert-danger').html('').hide();
+                     
+                                    numb.attr('data-val','true');
+                                }
 
                         var valid = par.find('[data-val]'); 
 
@@ -189,7 +219,7 @@ jQuery(function($){
                         */
                         
                         if( valid.length == numb.length ){
-
+                            console.log(Data_total);
                             $.ajax({
                                 url:par.attr('action'),
                                 type:'post',
@@ -231,6 +261,7 @@ jQuery(function($){
        
        var button = $(this);
        var parnt  = $(this).parents('form'); // menentukan induk dari tag yang di klik. dalam hal ini adalah tag <form>
+
        var Url  = parnt.attr('action'); // mengambil value dari attribut "action" dari tag <form>
 
        /*
@@ -255,98 +286,42 @@ jQuery(function($){
 
         }else{
 
-       $.ajax({
-            url:Url,
-            type:'post',
-            data:Data,
-            success:function(result){
-                jQuery('.input-total').html(result);
-
-                /*
-                    menyembunyikan Tombol "Lihat";
-                */
-                button.animate({
-                    'opacity': 0},
-                    400, function() {
-                    $(this).css('visibility','hidden');
-                });
+            $.ajax({
+                url:Url,
+                type:'post',
+                data:Data,
+                success:function(result){
+                    jQuery('.view-dana').html(result);
                 
-                /*
-                    menambah tombol "Simpan" di Inputan Total Dana
-                */
-                jQuery('.simpan-btn').html('<div class="btn btn-primary btn-sm simpan ">Simpan</div>');
+                    jQuery('.simpan-btn').html('<div class="btn btn-primary btn-sm simpan">Simpan</div>');
 
-                // Dan jika tombol "Simpan" di klik akan menjalankan fungsi ajax;
-                jQuery('.simpan').on('click',function() {
-             
-                    var par   = $(this).parents('form');
-             
-                    var numb  = par.find('[data="numb"]');
-                    
-                    var Data_total = par.serialize();
-                    
-                    /*
-                        Pencocokan apakah yang dimasukan kedalam inputan adalah angka atau bukan
-                        dengan fungsi RegExp Javasicript
-                        ref : http://www.w3schools.com/js/js_obj_regexp.asp 
-                              http://www.w3schools.com/jsref/jsref_obj_regexp.asp
-                    */
-                    numb.each(function() {
+                    jQuery('.simpan').click(function(event) {
+                        event.preventDefault();
 
-                        var patrn = new RegExp('[0-9]');
+                        var parn = $(this).parents('form');
+                        Data     = parn.serialize();
 
-                        var value = $(this).val();
-                        
-                        if(patrn.test(value) === false){
-                        
-                            $('.alert-danger').html('<p><b><i>Parameter yang Anda Masukan Bukan angka</i></b></p>').removeClass('hide');
-                            
-                            $(this).css('border', '1px solid red');  
+                        $.ajax({
+                         url: parn.attr('action'),
+                         type:'post',
+                         data:Data,
+                         success:function(result){
 
-                        }else{
-             
-                            $('.alert-danger').html('').hide();
-             
-                            $(this).attr('data-val','true');
-                        }
+                            if( result == 'sukses' ){
+                                location.reload(true);
+                            }else{
+                                alert(result);
+                            }
+                         }
 
+                        }); return false;
 
                     });
 
-                    var valid = par.find('[data-val]'); 
+                }
 
-                    /*
-                        menyamakan jumlah tag beratribut "data-val" dengan tag beratribut "data" bervalue "numb". melalui fungsi length; 
-                    */
-                    
-                    if( valid.length == numb.length ){
-
-                        $.ajax({
-                            url:par.attr('action'),
-                            type:'post',
-                            data:Data_total,
-                            success:function(result){
-                                if(result == 'sukses'){
-                            
-                                    alert('Insert Sukses');
-                                    location.reload(true); // me-reload halaman saat ini;
-                            
-                                }else{
-                            
-                                    alert(result);
-                            
-                                }
-                            }
-
-                        });
-
-                        return false;
-                    }
-                });
-
-            }
-       });
-       return false;
+            });
+            return false;
      }
    
     });
